@@ -1,0 +1,29 @@
+services:
+  monolith:
+    build: ./monolith
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+
+  celery:
+    build: ./monolith
+    command: celery -A app.tasks.celery_app worker --loglevel=info
+    depends_on:
+      - redis
+      - monolith
+
+  notification-service:
+    build: ./notification_service
+    depends_on:
+      - rabbitmq
+      - redis
+
+  postgres:
+    image: postgres:15
+
+  redis:
+    image: redis:7
+
+  rabbitmq:
+    image: rabbitmq:3-management
