@@ -1,4 +1,4 @@
-# 🌟 Habit Tracker 3.0 — Microservice Edition
+# 🌟 Habit Tracker — Microservice Edition
 
 A **production-grade habit tracking system** built with a modern Python backend stack.
 This project demonstrates **clean architecture, microservices, event‑driven communication, background processing, caching, and real‑world integrations**.
