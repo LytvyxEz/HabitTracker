@@ -1,0 +1,14 @@
+✔	JWT
+✔	HashManager
+✔	Database
+✔	User model
+✔	Pydantic schemas
+✔   get_current_user() dependency
+✔   Redis for refresh tokens
+
+✔❗	Auth service
+
+✔❗   DAO (user repository)
+
+❗   Auth router
+
