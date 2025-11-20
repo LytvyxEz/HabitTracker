@@ -2,17 +2,13 @@ from fastapi import HTTPException
 
 from ...core.abstractions import AbcAuthService
 from ..auth.schemas import UserResponse
-from ...core.jwt import jwt_manager
 
-class AuthService(AbcAuthService):
-    def __init__(self):
-        super().__init__()
-    
+class AuthService(AbcAuthService):    
     
     async def create_tokens(self, user: UserResponse):
-        access, refresh = jwt_manager.create_tokens(user)
+        access, refresh = self.jwt_manager.create_tokens(user)
 
-        refresh_payload = jwt_manager.decode_jwt(refresh)
+        refresh_payload = self.jwt_manager.decode_jwt(refresh)
         
         jti = refresh_payload["jti"]
 
@@ -23,27 +19,26 @@ class AuthService(AbcAuthService):
         return access, refresh
     
     
-async def refresh_token_check(self, refresh_token: str):
-    payload = jwt_manager.decode_jwt(refresh_token)
+    async def refresh_token_check(self, refresh_token: str):
+        payload = self.jwt_manager.decode_jwt(refresh_token)
 
-    if payload["typ"] != "refresh":
-        raise HTTPException(401, "Wrong token type")
+        if payload["typ"] != "refresh":
+            raise HTTPException(401, "Wrong token type")
 
-    jti = payload["jti"]
+        jti = payload["jti"]
 
-    user_id = await self.refresh_repo.exists(jti)
-    if not user_id:
-        raise HTTPException(401, "Refresh token expired or revoked")
+        user_id = await self.refresh_repo.exists(jti)
+        if not user_id:
+            raise HTTPException(401, "Refresh token expired or revoked")
 
-    await self.refresh_repo.delete(jti)
+        await self.refresh_repo.delete(jti)
 
-    user = ... # await self.user_repo.get_user_by_id(int(payload["sub"]))
+        user = await self.user_dao.get_by_id(int(payload["sub"]))
 
-    access, refresh = await self.create_tokens(user)
+        access, refresh = await self.create_tokens(user)
 
-    return {
-        "access": access,
-        "refresh": refresh
-    }
+        return {
+            "access": access,
+            "refresh": refresh
+        }
         
-auth_service = AuthService()

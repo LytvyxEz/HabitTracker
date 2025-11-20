@@ -1,7 +1,7 @@
 from ..core.abstractions import AbcRefreshToken
 
 
-class RefreshToken(AbcRefreshToken):
+class RefreshTokenDAO(AbcRefreshToken):
     def __init__(self):
         super().__init__()
         
@@ -16,4 +16,3 @@ class RefreshToken(AbcRefreshToken):
         await self.redis.delete(self._key(jti))
         
         
-refresh_token_manager = RefreshToken()

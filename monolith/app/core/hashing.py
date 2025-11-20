@@ -14,5 +14,4 @@ class HashManager(AbstractHashManager):
 
 
 
-hash_manager = HashManager()
 

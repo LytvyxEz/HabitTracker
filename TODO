@@ -5,10 +5,9 @@
 ✔	Pydantic schemas
 ✔   get_current_user() dependency
 ✔   Redis for refresh tokens
+✔   DAO (user repository)
 
 ✔❗	Auth service
-
-✔❗   DAO (user repository)
 
 ❗   Auth router
 

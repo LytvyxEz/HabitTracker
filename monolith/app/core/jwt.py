@@ -45,5 +45,3 @@ class JWT(AbcJWT):
         refresh_token = cls.encode_jwt(user, "refresh", expire_minutes=60 * 24 * 7)
         return access_token, refresh_token
 
-
-jwt_manager = JWT()
