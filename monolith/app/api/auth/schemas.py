@@ -42,11 +42,7 @@ class LoginSchema(BaseModel):
     email: EmailStr
     username: str
     password: str
-    
 
-
-class RefreshSchema(BaseModel):
-    refresh_token: str
     
 
 

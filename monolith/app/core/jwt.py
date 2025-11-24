@@ -9,13 +9,14 @@ from app.api.auth.schemas import UserResponse
 
 class JWT(AbcJWT):
     @staticmethod
-    def encode_jwt(user: UserResponse, token_type: str, expire_minutes: int):
+    def encode_jwt(user: UserResponse, token_type: str, expire_minutes: int, sid: str):
         now = datetime.now(timezone.utc)
 
         payload = {
             "sub": str(user.id),
             "email": user.email,   
             "username": user.username, 
+            "sid": sid,
             "jti": uuid.uuid4().hex,
             "iat": int(now.timestamp()),
             "exp": int((now + timedelta(minutes=expire_minutes)).timestamp()),
@@ -41,7 +42,8 @@ class JWT(AbcJWT):
 
     @classmethod
     def create_tokens(cls, user: UserResponse):
-        access_token = cls.encode_jwt(user, "access", expire_minutes=15)
-        refresh_token = cls.encode_jwt(user, "refresh", expire_minutes=60 * 24 * 7)
+        sid = uuid.uuid4().hex
+        access_token = cls.encode_jwt(user=user, token_type="access", expire_minutes=15, sid=sid)
+        refresh_token = cls.encode_jwt(user=user, token_type="refresh", expire_minutes=60 * 24 * 7, sid=sid)
         return access_token, refresh_token
 

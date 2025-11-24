@@ -1,13 +1,116 @@
-✔	JWT
-✔	HashManager
-✔	Database
-✔	User model
-✔	Pydantic schemas
-✔   get_current_user() dependency
-✔   Redis for refresh tokens
-✔   DAO (user repository)
+Project: {
+    First week: {
+        
+        ✔ Docker {
+            ✔ docker-compose.yml
+            ✔ DockerFile {
+                ✔  FastAPI
+                ✔  Celery 
+            } 
+        }
 
-✔❗	Auth service
 
-❗   Auth router
 
+        ✔	JWT {
+            ✔ encode_jwt
+            ✔ decode_jwt
+            ✔ create_tokens
+        }
+
+        ✔	HashManager {
+            ✔ hash_password
+            ✔ check_password
+        }
+
+        ✔	Database {
+            ✔ User model
+            ✔ Lifespan
+            ✔ Base
+            ✔ Session
+            
+        }
+
+
+
+        ✔ Abstactions {
+            Custom exceptions {
+                ✔ UserNotFound
+                ✔ UserAlreadyExists
+                ✔ UserDoesNotExists
+                ✔ InvalidCredentials
+            }
+            ✔ AuthService
+            ✔ HashManager
+            ✔ JWT
+            ✔ UserDAO
+            ✔ RefreshDAO
+        }
+        ✔ Dependencies {
+            ✔ get_current_user
+            ✔ get_sid
+            ✔ prevent_authenticated_access
+            ✔ get_hash_manager
+            ✔ get_jwt_manager
+            ✔ get_user_dao
+            ✔ get_refresh_dao
+            ✔ get_auth_service
+        }
+
+        ✔ Redis for refresh tokens
+
+        
+        ✔   DAO {
+            ✔ user repository {
+                ✔ get_by_email
+                ✔ get_by_id
+                ✔ create_user
+                ✔ login_user
+            }
+            ✔ refresh repository {
+                ✔ delete
+                ✔ exists
+                ✔ save
+            }
+        }
+
+
+        ✔❗ app {
+            ✔ FastAPI app
+            ✔ api {
+                ✔ Pydantic schemas {
+                    ✔ TokenResponse
+                    ✔ RegisterSchema
+                    ✔ UserResponse
+                    ✔ LoginSchema
+                }
+
+                ✔❗ Auth router {
+                    ✔  register
+                    ✔  login
+                    ❗ refresh
+                    ✔ logout 
+                }   
+
+                ✔❗	Auth service {
+                    ✔ create_user
+                    ✔ login_user
+                    ✔ create_tokens
+                    ✔ logout_user
+                    ❗✔ refresh_token_check
+                }
+            } 
+        } 
+    }
+
+     Second week: {
+
+    }
+
+     Third week: {
+
+    }
+
+     Fourth week: {
+
+    }
+}

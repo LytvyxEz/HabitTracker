@@ -3,17 +3,18 @@ from pydantic import EmailStr
 from typing import Any
 
 class AbcJWT(ABC):
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def encode_jwt(email: EmailStr) -> str:
         raise NotImplementedError()
     
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def decode_jwt(token: str) -> Any:
         raise NotImplementedError()
         
     
     @classmethod
+    @abstractmethod
     def create_tokens(cls, email: EmailStr) -> tuple:
         raise NotImplementedError()

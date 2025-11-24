@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     TOKEN_ALG: str
     SECRET_KEY: str
     
+    REDIS_HOST: str = "localhost" 
+    REDIS_PORT: int = 6379
+    
     @computed_field
     @property
     def DATABASE_URL(self) -> str:

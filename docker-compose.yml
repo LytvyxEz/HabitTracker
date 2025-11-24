@@ -7,22 +7,24 @@ services:
       - .env
     ports:
       - "8000:8000"
-    restart: on-failure
+    volumes:
+      - ./monolith:/monolith
     depends_on:
       postgres:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy  
       rabbitmq:
         condition: service_started
     environment:
       - DB_HOST=postgres
       - REDIS_HOST=redis
       - RABBITMQ_HOST=rabbitmq
+      - PYTHONUNBUFFERED=1  
     command: >
       sh -c "sleep 5 && 
-            python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"
-
+            python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+  
   postgres:
     image: postgres:15
     environment:
@@ -39,7 +41,7 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
-
+  
   redis:
     image: redis:7
     ports:
@@ -49,7 +51,7 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
-
+  
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -60,24 +62,27 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  
+  celery:
+    build:
+      context: .
+      dockerfile: monolith/docker/celery.Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - rabbitmq
+      - monolith
+    environment:
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+      - RABBITMQ_HOST=rabbitmq
 
 volumes:
   postgres_data:
-
+    
   # notification-service:
   #   build: ./notification_service
   #   depends_on:
   #     - rabbitmq
   #     - redis
-
-  # celery:
-  #   build:
-  #     context: .
-  #     dockerfile: monolith/docker/Dockerfile
-  #   command: celery -A app.tasks.celery_app worker --loglevel=info
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     - redis
-  #     - monolith
-

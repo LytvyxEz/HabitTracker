@@ -1,25 +1,22 @@
 from abc import ABC, abstractmethod
-
 from redis.asyncio import Redis
-
-from ..redis import r
 
 class AbcRefreshToken(ABC):
     
-    def __init__(self, redis: Redis = r):
+    def __init__(self, redis: Redis):
         self.redis = redis
     
-    def _key(self, jti: str):
-        raise f"refresh:{jti}"
+    def _key(self, sid: str):
+        return f"refresh:{sid}"
     
     @abstractmethod
-    async def save(self, jti: str, user_id: int, ttl_second: int):
+    async def save(self, sid: str, user_id: int, ttl_second: int):
         raise NotImplementedError()
         
     @abstractmethod
-    async def exists(self, jti: str):
+    async def exists(self, sid: str):
         raise NotImplementedError()
         
     @abstractmethod
-    async def delete(self, jti: str):
+    async def delete(self, sid: str):
         raise NotImplementedError()

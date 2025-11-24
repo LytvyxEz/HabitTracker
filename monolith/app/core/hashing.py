@@ -9,7 +9,9 @@ class HashManager(AbstractHashManager):
         return await to_thread(checkpw, password.encode('utf-8'), hashed_password)
 
     @staticmethod        
-    async def hash_password(password: str | bytes) -> str | bytes:
+    async def hash_password(password: str | bytes) -> bytes:
+        if isinstance(password, str):
+            password = password.encode('utf-8')
         return await to_thread(hashpw, password, gensalt())
 
 
