@@ -1,9 +1,12 @@
-from fastapi import APIRouter, Request, Depends, Response, HTTPException
+from fastapi import APIRouter, Request, Depends, Response, HTTPException, Cookie
 
-from .schemas import UserResponse, LoginSchema, RegisterSchema
+from typing import Optional
+
+from .schemas import LoginSchema, RegisterSchema
 from .service import AuthService
 from ...core.abstractions import UserNotFoundError, UserAlreadyExistsError, InvalidCredentials, UserDoesNotExistsError
 from ...core.dependencies import get_current_user, get_auth_service, prevent_authenticated_access, get_sid
+from ...schemas.user import UserResponse
 
 
 router = APIRouter(prefix='/auth')
@@ -11,14 +14,16 @@ router = APIRouter(prefix='/auth')
 
 @router.post('/register')
 async def register(
-    request: Request,
     user_data: RegisterSchema,
     auth_service: AuthService = Depends(get_auth_service),
     _: None = Depends(prevent_authenticated_access)
 ):
     try:
+        
         user = await auth_service.create_user(user_data)
-        return {'message': 'Succesfully created account'}
+        return {'message': f'Succesfully created {user}'}
+    
+    
     except (UserAlreadyExistsError, UserNotFoundError) as e:
         raise HTTPException(status_code=400, detail=str(e))
     
@@ -30,7 +35,7 @@ async def login(
     _: None = Depends(prevent_authenticated_access)
 ):
     try:
-        user, access_token = await auth_service.login_user(user_data)
+        access_token = (await auth_service.login_user(user_data))[1]
     
         response.set_cookie(
             key="access_token",
@@ -50,10 +55,23 @@ async def login(
 @router.post("/refresh")
 async def refresh(
     response: Response,
+    access_token: Optional[str] = Cookie(default=None, alias="access_token"),
     auth_service: AuthService = Depends(get_auth_service)
 ):
-    ... #TODO
+    access_token = await auth_service.refresh_token_check(access_token)
     
+    
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,
+        secure=True,  
+        samesite="lax",
+        max_age=15 * 60, 
+    )
+    
+    return {'message': 'success'}
+
     
 @router.post('/logout')
 async def logout(

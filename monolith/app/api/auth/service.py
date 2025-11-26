@@ -2,9 +2,9 @@ from fastapi import HTTPException, Depends, Cookie
 
 from typing import Optional
 
+from ..auth.schemas import RegisterSchema, LoginSchema
+from ...schemas.user import UserResponse
 from ...core.abstractions import AbcAuthService
-from ..auth.schemas import UserResponse, RegisterSchema, LoginSchema
-
 
 class AuthService(AbcAuthService):    
     
@@ -20,30 +20,28 @@ class AuthService(AbcAuthService):
         return access, refresh
     
     
-    async def refresh_token_check(self, refresh_token: str):
-        # payload = self.jwt_manager.decode_jwt(refresh_token)
-        # if payload["typ"] != "refresh":
-        #     raise HTTPException(401, "Wrong token type")
+    async def refresh_token_check(self, access_token: Optional[str]):
+        if not access_token:
+            raise HTTPException(401, 'Access token is missing')
         
-        # sid = payload["sid"]
-        # stored_user_id = await self.refresh_repo.exists(sid)
+        access_payload: dict = self.jwt_manager.decode_jwt(access_token)
+
+        sid = access_payload['sid']
+        refresh = await self.refresh_repo.get(sid)
         
-        # if not stored_user_id:
-        #     raise HTTPException(401, "Refresh token expired or revoked")
+        if not refresh:
+            raise HTTPException(401, "Refresh token expired or revoked")
         
-        # if str(stored_user_id) != str(payload["sub"]):
-        #     raise HTTPException(401, "Token user mismatch")
+        if str(refresh) != str(access_payload["sub"]):
+            raise HTTPException(401, "Token user mismatch")
         
-        # await self.refresh_repo.delete(sid)
+        await self.refresh_repo.delete(sid)
         
-        # user = await self.user_dao.get_by_id(int(payload["sub"]))
-        # access, refresh = await self.create_tokens(user)
+        user = await self.user_dao.get_by_id(int(access_payload["sub"]))
+        access, refresh = await self.create_tokens(user)
         
-        # return {
-        #     "access": access,
-        #     "refresh": refresh
-        # }
-        ... #TODO
+        
+        return access
         
     
     async def create_user(self, user_data: RegisterSchema) -> UserResponse: 

@@ -1,7 +1,7 @@
 from sqlalchemy import select, or_, and_
 
 from ..db.models import User
-from ..api.auth.schemas import RegisterSchema, LoginSchema
+from ..api.auth.schemas import LoginSchema
 from app.core.abstractions import AbcUserDAO
 
 
@@ -17,7 +17,7 @@ class UserDAO(AbcUserDAO):
         return user
         
     async def get_by_id(self, user_id: int):
-        user = await self.db.execute(select(User).filter(User.id == user_id)).scalar_one_or_none() 
+        user = (await self.db.execute(select(User).filter(User.id == user_id))).scalar_one_or_none() 
         if not user:
             from app.core.abstractions import UserNotFoundError
             raise UserNotFoundError('User is not found')

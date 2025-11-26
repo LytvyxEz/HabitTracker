@@ -1,5 +1,12 @@
-Project: {
-    First week: {
+✔ - completed
+🗙 - uncompleted
+❕ - bugs
+✔🗙 - in progress / almost done
+
+
+
+✔🗙🗙🗙 Project: {
+    ✔ First week: {
         
         ✔ Docker {
             ✔ docker-compose.yml
@@ -74,7 +81,7 @@ Project: {
         }
 
 
-        ✔❗ app {
+        ✔ app {
             ✔ FastAPI app
             ✔ api {
                 ✔ Pydantic schemas {
@@ -84,33 +91,100 @@ Project: {
                     ✔ LoginSchema
                 }
 
-                ✔❗ Auth router {
-                    ✔  register
-                    ✔  login
-                    ❗ refresh
-                    ✔ logout 
+                ✔ Auth router {
+                    ✔  /register
+                    ✔  /login
+                    ✔  /refresh
+                    ✔  /logout 
                 }   
 
-                ✔❗	Auth service {
+                ✔	Auth service {
                     ✔ create_user
                     ✔ login_user
                     ✔ create_tokens
                     ✔ logout_user
-                    ❗✔ refresh_token_check
+                    ✔ refresh_token_check
                 }
             } 
         } 
     }
 
-     Second week: {
+ 🗙 Second week: {
 
+        ✔ Docker & Infrastructure {
+            ✔ full docker-compose (monolith, redis, postgres, celery, rabbitmq)
+            ✔ fix Dockerfile for monolith final structure
+            ✔ named volumes for DB, redis
+            ✔ .env 
+        }
+
+        🗙 Alembic migrations {
+            🗙 alembic init
+            🗙 initial migration for User
+            🗙 migrations README
+        }
+
+        🗙 User endpoints {
+            ✔  /me 
+        }
+
+        🗙 Auth improvements {
+            🗙 refresh security polishing
+            🗙 logout flow polishing
+            🗙 return unified error responses
+            🗙 secure cookie flags (if used)
+        }
     }
 
-     Third week: {
+    🗙 Third week: {
 
+        🗙 Habit domain {
+            🗙 Habit model
+            🗙 Habit Pydantic schemas
+            🗙 Habit DAO (repository)
+            🗙 Habit service (CRUD)
+            🗙 Habit router (CRUD)
+        }
+
+        🗙 Habit logic {
+            🗙 toggle done / not-done
+            🗙 daily auto-creation of tasks
+            🗙 reminders (simple version)
+        }
+
+        🗙 Celery integration {
+            🗙 celery worker config
+            🗙 periodic tasks (beat or schedule)
+            🗙 tasks for reminders
+        }
     }
 
-     Fourth week: {
+    🗙 Fourth week: {
 
+        🗙 Notifications {
+            🗙 integrate RabbitMQ (or internal events)
+            🗙 notification dispatcher
+            🗙 email or in-app notifications
+        }
+
+        🗙 Analytics {
+            🗙 streak calculation
+            🗙 habit stats (daily / weekly / monthly)
+            🗙 success rate
+        }
+
+        🗙 API polishing {
+            🗙 pagination (if needed)
+            🗙 unify response format
+            🗙 unify error codes
+        }
+
+        🗙 Final polish {
+            🗙 logging setup
+            🗙 tests (unit + integration)
+            🗙 pre-commit hooks (black, isort, flake8, mypy)
+            🗙 project cleanup
+        }
     }
 }
+

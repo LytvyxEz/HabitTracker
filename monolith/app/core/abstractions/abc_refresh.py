@@ -14,7 +14,7 @@ class AbcRefreshToken(ABC):
         raise NotImplementedError()
         
     @abstractmethod
-    async def exists(self, sid: str):
+    async def get(self, sid: str):
         raise NotImplementedError()
         
     @abstractmethod

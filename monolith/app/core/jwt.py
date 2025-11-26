@@ -4,7 +4,7 @@ import uuid
 
 from app.core.config import settings
 from app.core.abstractions import AbcJWT
-from app.api.auth.schemas import UserResponse
+from ..schemas.user import UserResponse
 
 
 class JWT(AbcJWT):
@@ -29,8 +29,6 @@ class JWT(AbcJWT):
 
     @staticmethod
     def decode_jwt(token: str):
-        if token.startswith("Bearer "):
-            token = token.split(" ", 1)[1]
 
         return decode(
             token,

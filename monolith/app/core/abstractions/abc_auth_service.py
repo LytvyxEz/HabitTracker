@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 
 
-from ...api.auth.schemas import UserResponse
 from ...repository.refresh_token import RefreshTokenDAO
 from ...repository.user import UserDAO
 from ...core.dependencies import JWT, HashManager
+from ...schemas.user import UserResponse
 
 class AbcAuthService(ABC):
     
@@ -13,6 +13,7 @@ class AbcAuthService(ABC):
         self.refresh_repo = refresh_dao
         self.jwt_manager = jwt_manager
         self.hash_manager = hash_manager
+    
     
     @abstractmethod
     async def create_tokens(self, user: UserResponse):

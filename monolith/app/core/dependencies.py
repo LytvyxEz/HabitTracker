@@ -1,10 +1,13 @@
 from fastapi import HTTPException, Cookie, status, Depends
 from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
-from ..api.auth.schemas import UserResponse
+
+
+from ..schemas.user import UserResponse
 from ..db.session import get_db
 
-def get_current_user(access_token: Optional[str] = Cookie(None)) -> UserResponse:
+
+def get_current_user(access_token: Optional[str] = Cookie(None, alias='access_token')) -> UserResponse:
     if not access_token:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
